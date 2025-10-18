@@ -1,5 +1,5 @@
-import psycopg2
-from psycopg2.extras import RealDictCursor  # ✅ Added to get dicts instead of tuples
+import psycopg
+from psycopg.extras import RealDictCursor  # ✅ Added to get dicts instead of tuples
 from app.config import settings
 from passlib.context import CryptContext
 from typing import Optional, Dict
@@ -7,7 +7,7 @@ from typing import Optional, Dict
 
 # ---------------- DATABASE CONNECTION ----------------
 def get_connection():
-    return psycopg2.connect(
+    return psycopg.connect(
         dbname=settings.POSTGRES_DB,
         user=settings.POSTGRES_USER,
         password=settings.POSTGRES_PASSWORD,
