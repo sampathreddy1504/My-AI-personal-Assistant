@@ -65,7 +65,7 @@ def check_and_trigger_tasks():
     Sends an email if a task is due (in IST timezone) and not yet notified.
     """
     try:
-        conn = psycopg2.connect(
+        conn = psycopg.connect(
             dbname=POSTGRES_DB,
             user=POSTGRES_USER,
             password=POSTGRES_PASSWORD,
