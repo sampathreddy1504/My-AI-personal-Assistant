@@ -1,13 +1,14 @@
 #!/bin/bash
-set -e
 
-# Upgrade pip to avoid old resolver issues
+# Activate virtual environment
+source /opt/render/project/src/.venv/bin/activate
+
+# Install dependencies
 pip install --upgrade pip
+pip install -r requirements.txt
 
-# Install requirements fresh
-pip install --no-cache-dir -r requirements.txt
+# Run Celery worker (adjust path if needed)
+celery -A app.worker.celery worker --loglevel=info &
 
-# Start Celery and FastAPI
-celery -A app.worker.celery beat --detach
-celery -A app.worker.celery worker --detach
+# Run FastAPI app
 uvicorn app.main:app --host 0.0.0.0 --port $PORT
