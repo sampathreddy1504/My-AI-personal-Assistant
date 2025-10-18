@@ -1,10 +1,10 @@
-import psycopg2
-from psycopg2.extras import RealDictCursor  # ✅ fetch as dict
+import psycopg
+from psycopg.extras import RealDictCursor  # ✅ fetch as dict
 from app.config import settings
 
 # ---------------- DATABASE CONNECTION ----------------
 def get_connection():
-    return psycopg2.connect(
+    return psycopg.connect(
         dbname=settings.POSTGRES_DB,
         user=settings.POSTGRES_USER,
         password=settings.POSTGRES_PASSWORD,
