@@ -3,7 +3,7 @@
 import os
 from celery import Celery
 from datetime import datetime
-import psycopg2
+import psycopg
 import smtplib
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
