@@ -1,7 +1,6 @@
 fastapi==0.118.0
 uvicorn[standard]==0.23.2
-psycopg2-binary==2.9.9
-   # ✅ Correct form with extras and C optimizations
+psycopg2-binary
 redis==5.2.0
 neo4j==5.25.0
 cohere==5.18.0
