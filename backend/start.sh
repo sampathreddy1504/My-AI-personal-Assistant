@@ -1,14 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -o errexit
+set -o pipefail
+set -o nounset
 
-# Activate virtual environment
-source /opt/render/project/src/.venv/bin/activate
+echo "🚀 Starting deployment sequence..."
 
-# Install dependencies
-pip install --upgrade pip
-pip install -r requirements.txt
+# ======================================================
+# STEP 1: Ensure DB Tables Exist
+# ======================================================
+echo "📦 Checking PostgreSQL and creating tables if needed..."
+python -c "from app.db.postgres import create_tables; create_tables()"
 
-# Run Celery worker (adjust path if needed)
-celery -A app.worker.celery worker --loglevel=info &
+# ======================================================
+# STEP 2: Start Celery Worker (in background)
+# ======================================================
+echo "⚙️ Launching Celery worker..."
+celery -A worker worker --loglevel=info &
 
-# Run FastAPI app
-uvicorn app.main:app --host 0.0.0.0 --port $PORT
+# ======================================================
+# STEP 3: Launch FastAPI Web Server
+# ======================================================
+echo "🌐 Starting FastAPI server on port 8000..."
+exec uvicorn app.main:app --host 0.0.0.0 --port 8000
