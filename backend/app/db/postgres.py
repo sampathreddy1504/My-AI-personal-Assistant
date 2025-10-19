@@ -1,5 +1,6 @@
+# backend/app/db/postgres.py
 import psycopg
-from psycopg.extras import RealDictCursor  # ✅ fetch as dict
+from psycopg.rows import dict_row  # ✅ correct replacement for RealDictCursor
 from app.config import settings
 
 # ---------------- DATABASE CONNECTION ----------------
@@ -10,7 +11,7 @@ def get_connection():
         password=settings.POSTGRES_PASSWORD,
         host=settings.POSTGRES_HOST,
         port=settings.POSTGRES_PORT,
-        cursor_factory=RealDictCursor  # ✅ ensures fetch returns dicts
+        row_factory=dict_row  # ✅ psycopg3 way to get rows as dicts
     )
 
 # ---------------- TABLE SETUP ----------------
