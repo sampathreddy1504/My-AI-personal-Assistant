@@ -1,17 +1,17 @@
 # backend/app/db/postgres.py
-import psycopg
-from psycopg.rows import dict_row  # ✅ correct replacement for RealDictCursor
+import psycopg2
+from psycopg2.extras import RealDictCursor
 from app.config import settings
 
 # ---------------- DATABASE CONNECTION ----------------
 def get_connection():
-    return psycopg.connect(
+    return psycopg2.connect(
         dbname=settings.POSTGRES_DB,
         user=settings.POSTGRES_USER,
         password=settings.POSTGRES_PASSWORD,
         host=settings.POSTGRES_HOST,
         port=settings.POSTGRES_PORT,
-        row_factory=dict_row  # ✅ psycopg3 way to get rows as dicts
+        cursor_factory=RealDictCursor  # ✅ return rows as dictionaries
     )
 
 # ---------------- TABLE SETUP ----------------
