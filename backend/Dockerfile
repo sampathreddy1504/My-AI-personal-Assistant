@@ -1,24 +1,27 @@
-# Use a specific stable Python version
-FROM python:3.11.9-slim
+# Use official Python 3.11 slim image
+FROM python:3.11-slim
+
+# Install system dependencies required for psycopg/PostgreSQL
+RUN apt-get update && apt-get install -y \
+    libpq-dev gcc build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Copy dependency file first (for better Docker layer caching)
+# Copy and install dependencies
 COPY requirements.txt .
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
-# Upgrade pip and install dependencies
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
-
-# Copy the rest of the application code
+# Copy project files
 COPY . .
 
-# Ensure environment variables exist (optional: only if .env needed at runtime)
-# COPY .env /app/.env
+# Copy .env file (if available)
+COPY .env /app/.env
 
-# Expose port (Render will map it automatically)
+# Expose FastAPI port
 EXPOSE 5000
 
-# Start FastAPI app
+# Command to run FastAPI
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]
